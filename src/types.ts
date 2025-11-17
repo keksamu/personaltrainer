@@ -7,3 +7,17 @@ export type Tcustomer = {
   postcode: string;
   city: string;
 };
+
+export type Ttraining = {
+  date: string;
+  duration: number;
+  activity: string;
+  _links: {
+    self: { href: string };
+    customer: { href: string };
+  };
+};
+
+export type TtrainingWithCustomer = Ttraining & {
+  customerName: string;
+};

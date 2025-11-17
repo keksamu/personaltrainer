@@ -6,16 +6,6 @@ import type { Tcustomer } from "../types";
 export default function CustomerList() {
     const [customers, setCustomers] = useState<Tcustomer[]>([]);
 
-    useEffect(() => {
-        getCustomers();
-    }, []);
-
-    const getCustomers = async () => {
-        const response = await fetch('https://customer-rest-service-frontend-personaltrainer.2.rahtiapp.fi/api/customers');
-        const data = await response.json();
-        setCustomers(data._embedded.customers);
-    };
-
     const columns: GridColDef[] = [
         { field: 'firstname', headerName: 'First Name', width: 150 },
         { field: 'lastname', headerName: 'Last Name', width: 150 },
@@ -26,15 +16,30 @@ export default function CustomerList() {
         { field: 'city', headerName: 'City', width: 150 }
     ];
 
+    const getCustomers = async () => {
+        try {
+            const response = await fetch('https://customer-rest-service-frontend-personaltrainer.2.rahtiapp.fi/api/customers');
+            if (!response.ok) {
+                throw new Error(`Failed to fetch customers: ${response.statusText}`);
+            }
+            const data = await response.json();
+            setCustomers(data._embedded.customers);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    useEffect(() => { getCustomers(); }, []);
+
     return (
-        <div style={{ height: 600, width: '100%' }}>
-            <h2>Customers</h2>
-            <DataGrid
-                rows={customers}
-                columns={columns}
-                getRowId={(row) => row.email}
-                pageSizeOptions={[5, 10, 25]}
-            />
+        <div style={{ width: '100%', margin: '20px auto 0' }}>
+            <div style={{ marginTop: '20px', height: '70vh', width: '100%' }}>
+                <DataGrid
+                    rows={customers}
+                    columns={columns}
+                    getRowId={(row) => row.email}
+                />
+            </div>
         </div>
     );
 }
