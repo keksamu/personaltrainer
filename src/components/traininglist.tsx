@@ -2,12 +2,18 @@ import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import type { GridColDef } from "@mui/x-data-grid";
 import type { Ttraining, TtrainingWithCustomer } from "../types";
+import dayjs from "dayjs";
 
 export default function TrainingList() {
     const [trainings, setTrainings] = useState<TtrainingWithCustomer[]>([]);
 
     const columns: GridColDef[] = [
-        { field: 'date', headerName: 'Date', width: 200 },
+        { 
+            field: 'date', 
+            headerName: 'Date', 
+            width: 200,
+            valueFormatter: (value) => dayjs(value).format('DD.MM.YYYY HH:mm')
+        },
         { field: 'duration', headerName: 'Duration (min)', width: 150 },
         { field: 'activity', headerName: 'Activity', width: 200 },
         { field: 'customerName', headerName: 'Customer', width: 250 }
