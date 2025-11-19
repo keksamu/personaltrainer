@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import type { GridColDef } from "@mui/x-data-grid";
+import type { GridColDef, GridRowParams } from "@mui/x-data-grid";
 import type { Ttraining, TtrainingWithCustomer } from "../types";
 import dayjs from "dayjs";
+import { Button } from "@mui/material";
+import AddTraining from "./addtraining";
 
 export default function TrainingList() {
     const [trainings, setTrainings] = useState<TtrainingWithCustomer[]>([]);
@@ -16,7 +18,12 @@ export default function TrainingList() {
         },
         { field: 'duration', headerName: 'Duration (min)', width: 150 },
         { field: 'activity', headerName: 'Activity', width: 200 },
-        { field: 'customerName', headerName: 'Customer', width: 250 }
+        { field: 'customerName', headerName: 'Customer', width: 250 },
+        { field: 'actions', type: 'actions', width: 100,
+            getActions: (params: GridRowParams) => [
+                <Button size="small" color="error" onClick={() => handleDelete(params.row._links.self.href)}>DELETE</Button>
+            ]
+        }
     ];
 
     const getTrainings = async () => {
@@ -29,18 +36,71 @@ export default function TrainingList() {
             
             const trainingsWithCustomers = await Promise.all(
                 data._embedded.trainings.map(async (training: Ttraining) => {
-                    const customerResponse = await fetch(training._links.customer.href);
-                    const customer = await customerResponse.json();
-                    return {
-                        ...training,
-                        customerName: `${customer.firstname} ${customer.lastname}`
-                    };
+                    try {
+                        const customerResponse = await fetch(training._links.customer.href);
+                        if (!customerResponse.ok) {
+                            return {
+                                ...training,
+                                customerName: 'Unknown'
+                            };
+                        }
+                        const customer = await customerResponse.json();
+                        return {
+                            ...training,
+                            customerName: `${customer.firstname} ${customer.lastname}`
+                        };
+                    } catch (error) {
+                        return {
+                            ...training,
+                            customerName: 'Unknown'
+                        };
+                    }
                 })
             );
             
             setTrainings(trainingsWithCustomers);
         } catch (err) {
-            console.log(err);
+            console.error('Failed to fetch trainings:', err);
+        }
+    };
+
+    const handleAdd = async (training: Omit<Ttraining, '_links'>, customerUrl: string) => {
+        try {
+            const trainingWithCustomer = {
+                ...training,
+                customer: customerUrl
+            };
+            
+            const options = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(trainingWithCustomer)
+            };
+
+            const response = await fetch('https://customer-rest-service-frontend-personaltrainer.2.rahtiapp.fi/api/trainings', options);
+            if (!response.ok) {
+                throw new Error(`Failed to add training: ${response.statusText}`);
+            }
+            
+            getTrainings();
+        } catch (err) {
+            console.error('Error adding training:', err);
+        }
+    };
+
+    const handleDelete = async (url: string) => {
+        try {
+            const options = { 
+                method: 'DELETE'
+            };
+
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                throw new Error(`Failed to delete training: ${response.statusText}`);
+            }
+            getTrainings();
+        } catch (err) {
+            console.error('Failed to delete training:', err);
         }
     };
 
@@ -48,6 +108,7 @@ export default function TrainingList() {
 
     return (
         <div style={{ width: '100%', margin: '20px auto 0' }}>
+            <AddTraining handleAdd={handleAdd} />
             <div style={{ marginTop: '20px', height: '70vh', width: '100%' }}>
                 <DataGrid
                     rows={trainings}
