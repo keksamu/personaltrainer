@@ -4,6 +4,7 @@ import type { GridColDef, GridRowParams } from "@mui/x-data-grid";
 import type { Tcustomer } from "../types";
 import { Button } from "@mui/material";
 import AddCustomer from "./addcustomer";
+import EditCustomer from "./editcustomer";
 
 export default function CustomerList() {
     const [customers, setCustomers] = useState<Tcustomer[]>([]);
@@ -18,6 +19,7 @@ export default function CustomerList() {
         { field: 'city', headerName: 'City', width: 150 },
         { field: 'actions', type: 'actions', width: 150,
             getActions: (params: GridRowParams) => [
+                <EditCustomer customer={params.row} handleEdit={handleEdit} />,
                 <Button size="small" color="error" onClick={() => { handleDelete(params.row._links.self.href)}}>DELETE</Button>
             ]
         }
@@ -47,6 +49,24 @@ export default function CustomerList() {
             const response = await fetch('https://customer-rest-service-frontend-personaltrainer.2.rahtiapp.fi/api/customers', options);
             if (!response.ok) {
                 throw new Error(`Failed to add customer: ${response.statusText}`);
+            }
+            getCustomers();
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const handleEdit = async (customer: Omit<Tcustomer, '_links'>, url: string) => {
+        try {
+            const options = {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(customer)
+            };
+
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                throw new Error(`Failed to edit customer: ${response.statusText}`);
             }
             getCustomers();
         } catch (err) {
