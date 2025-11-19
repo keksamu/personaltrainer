@@ -21,7 +21,9 @@ export default function TrainingList() {
         { field: 'customerName', headerName: 'Customer', width: 250 },
         { field: 'actions', type: 'actions', width: 100,
             getActions: (params: GridRowParams) => [
-                <Button size="small" color="error" onClick={() => handleDelete(params.row._links.self.href)}>DELETE</Button>
+                <Button size="small" color="error" onClick={() =>
+                    {if (window.confirm('Are you sure you want to delete this training?')) 
+                    handleDelete(params.row._links.self.href)}}>DELETE</Button>
             ]
         }
     ];
