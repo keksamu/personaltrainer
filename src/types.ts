@@ -6,6 +6,11 @@ export type Tcustomer = {
   streetaddress: string;
   postcode: string;
   city: string;
+  _links: {
+    self: { href: string };
+    customer: { href: string };
+    trainings: { href: string };
+  };
 };
 
 export type Ttraining = {

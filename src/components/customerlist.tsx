@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import type { GridColDef } from "@mui/x-data-grid";
+import type { GridColDef, GridRowParams } from "@mui/x-data-grid";
 import type { Tcustomer } from "../types";
+import { Button } from "@mui/material";
 
 export default function CustomerList() {
     const [customers, setCustomers] = useState<Tcustomer[]>([]);
@@ -13,7 +14,12 @@ export default function CustomerList() {
         { field: 'phone', headerName: 'Phone', width: 150 },
         { field: 'streetaddress', headerName: 'Address', width: 200 },
         { field: 'postcode', headerName: 'Postcode', width: 100 },
-        { field: 'city', headerName: 'City', width: 150 }
+        { field: 'city', headerName: 'City', width: 150 },
+        { field: 'actions', type: 'actions', width: 150,
+            getActions: (params: GridRowParams) => [
+                <Button size="small" color="error" onClick={() => { handleDelete(params.row._links.self.href)}}>DELETE</Button>
+            ]
+        }
     ];
 
     const getCustomers = async () => {
@@ -29,6 +35,22 @@ export default function CustomerList() {
         }
     };
 
+     const handleDelete = async (url: string) => {
+    try {
+        const options = { 
+            method: 'DELETE'
+        };
+
+        const response = await fetch(url, options);
+        if (!response.ok) {
+            throw new Error(`Failed to delete customer: ${response.statusText}`);
+        }
+        getCustomers();
+    } catch (err) {
+        console.log(err);
+    }
+}
+
     useEffect(() => { getCustomers(); }, []);
 
     return (
@@ -37,7 +59,7 @@ export default function CustomerList() {
                 <DataGrid
                     rows={customers}
                     columns={columns}
-                    getRowId={(row) => row.email}
+                    getRowId={(row) => row._links.self.href}
                 />
             </div>
         </div>
