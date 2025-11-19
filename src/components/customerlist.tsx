@@ -3,6 +3,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import type { GridColDef, GridRowParams } from "@mui/x-data-grid";
 import type { Tcustomer } from "../types";
 import { Button } from "@mui/material";
+import AddCustomer from "./addcustomer";
 
 export default function CustomerList() {
     const [customers, setCustomers] = useState<Tcustomer[]>([]);
@@ -35,26 +36,45 @@ export default function CustomerList() {
         }
     };
 
-     const handleDelete = async (url: string) => {
-    try {
-        const options = { 
-            method: 'DELETE'
-        };
+    const handleAdd = async (customer: Omit<Tcustomer, '_links'>) => {
+        try {
+            const options = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(customer)
+            };
 
-        const response = await fetch(url, options);
-        if (!response.ok) {
-            throw new Error(`Failed to delete customer: ${response.statusText}`);
+            const response = await fetch('https://customer-rest-service-frontend-personaltrainer.2.rahtiapp.fi/api/customers', options);
+            if (!response.ok) {
+                throw new Error(`Failed to add customer: ${response.statusText}`);
+            }
+            getCustomers();
+        } catch (err) {
+            console.log(err);
         }
-        getCustomers();
-    } catch (err) {
-        console.log(err);
-    }
-}
+    };
+
+    const handleDelete = async (url: string) => {
+        try {
+            const options = { 
+                method: 'DELETE'
+            };
+
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                throw new Error(`Failed to delete customer: ${response.statusText}`);
+            }
+            getCustomers();
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     useEffect(() => { getCustomers(); }, []);
 
     return (
         <div style={{ width: '100%', margin: '20px auto 0' }}>
+            <AddCustomer handleAdd={handleAdd} />
             <div style={{ marginTop: '20px', height: '70vh', width: '100%' }}>
                 <DataGrid
                     rows={customers}
