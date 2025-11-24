@@ -6,6 +6,7 @@ import Training from './pages/Training';
 import Customer from './pages/Customer';
 import Home from './pages/Home';
 import './index.css';
+import Calendar from './pages/Calendar';
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: "customer",
         element: <Customer />,
+      },
+        {
+        path: "calendar",
+        element: <Calendar />,
       },
     ]
   }
