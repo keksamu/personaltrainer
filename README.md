@@ -1,73 +1,32 @@
-# React + TypeScript + Vite
+# Personal-Trainer sovellus
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Osa 1
+Luo React sovellus, jossa on omat listasivut asiakkaille (customer) ja harjoituksille (training). Luo myös navigaatio, jolla sivujen välillä voi siirtyä.
 
-Currently, two official plugins are available:
+Listasivujen minimivaatimukset:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Järjestely (sorting)
+- Tietojen haku/suodatus eri sarakkeiden perusteella
+- Näytä myös asiakkaan nimi harjoitus -listasivulla
+- Muotoile päivämäärä taulkossa esim. mutoon pp.kk.vvvv hh:mm
 
-## React Compiler
+## Osa 2
+Lisää seuraavat CRUD toiminnallisuudet asiakas ja harjoitus listasivuille:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Uuden asiakkaiden lisäys
+- Asiakkaan muokkaus ja poisto
+- Uuden harjoituksen lisääminen asiakkaalle. Käytä harjoituksen päivämäärän syöttöön jotain siihen soveltuvaa komponenttia
+- Harjoituksen poisto
+Lisää poistotoimintoihin myös vahvistus käyttäjältä.
 
-## Expanding the ESLint configuration
+## Osa 3
+- Lisää export toiminnallisuus, jolla käyttäjä voi viedä asiakastiedot CSV tiedostoon. Suodata tiedostosta pois kaikki ylimääräinen tieto (esim. painike sarakkeet)
+- Lisää kalenterisivu, jossa näkyy kaikki varatut harjoitukset kalenterissa (viikkonäkymä, kuukausnäkymä, päivänäkymä).
+- Asenna käyttöliittymä valitsemallesi pilvipalvelimelle
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Osa 4
+- Lisää tilastosivu, josta käyttäjä voi nähdä kuvaajassa kuinka paljon eri harjoitustyyppejä (activity) on ajallisesti varattu minuutteina
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
