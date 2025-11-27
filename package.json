@@ -17,15 +17,18 @@
     "@mui/x-data-grid": "^8.18.0",
     "@mui/x-date-pickers": "^8.18.0",
     "dayjs": "^1.11.19",
+    "lodash": "^4.17.21",
     "papaparse": "^5.5.3",
     "react": "^19.2.0",
     "react-big-calendar": "^1.19.4",
     "react-dom": "^19.2.0",
     "react-router": "^7.9.6",
+    "recharts": "^3.5.0",
     "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@types/lodash": "^4.17.21",
     "@types/node": "^24.10.0",
     "@types/papaparse": "^5.5.0",
     "@types/react": "^19.2.2",

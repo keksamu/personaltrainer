@@ -7,6 +7,7 @@ import Customer from './pages/Customer';
 import Home from './pages/Home';
 import './index.css';
 import Calendar from './pages/Calendar';
+import Statistics from './pages/Statistics';
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
         path: "calendar",
         element: <Calendar />,
       },
+      {
+        path: "statistics",
+        element: <Statistics />,
+      }
     ]
   }
 ]);
