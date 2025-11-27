@@ -1,5 +1,7 @@
 # Personal-Trainer sovellus
 
+Front end ohjelmointi kurssin lopputyö. Ideana tehdä personal trainer sovellus, jossa näkyy harjoitukset, asiakkaat, statistiikka ja kalenteri. Harjoituksia ja asiakkaita pystyy lisäämään.
+
 ## Osa 1
 Luo React sovellus, jossa on omat listasivut asiakkaille (customer) ja harjoituksille (training). Luo myös navigaatio, jolla sivujen välillä voi siirtyä.
 
@@ -26,6 +28,8 @@ Lisää poistotoimintoihin myös vahvistus käyttäjältä.
 
 ## Osa 4
 - Lisää tilastosivu, josta käyttäjä voi nähdä kuvaajassa kuinka paljon eri harjoitustyyppejä (activity) on ajallisesti varattu minuutteina
+
+Link to App: https://personaltrainer-coral.vercel.app/
 
 
 
